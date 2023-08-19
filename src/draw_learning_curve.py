@@ -14,9 +14,9 @@ def read_performance_records(path):
     """ load the performance score (.json) file """
     
     data = json.load(open(path, 'rb'))
-    for key in data['success_rate'].keys():
+    for key in list(data['success_rate'].keys()):
         if int(key) > -1:
-            print("%s\t%s\t%s\t%s" % (key, data['success_rate'][key], data['ave_turns'][key], data['ave_reward'][key]))
+            print(("%s\t%s\t%s\t%s" % (key, data['success_rate'][key], data['ave_turns'][key], data['ave_reward'][key])))
             
 
 def load_performance_file(path):
@@ -24,7 +24,7 @@ def load_performance_file(path):
     
     data = json.load(open(path, 'rb'))
     numbers = {'x': [], 'success_rate':[], 'ave_turns':[], 'ave_rewards':[]}
-    keylist = [int(key) for key in data['success_rate'].keys()]
+    keylist = [int(key) for key in list(data['success_rate'].keys())]
     keylist.sort()
 
     for key in keylist:
@@ -67,6 +67,6 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     params = vars(args)
-    print json.dumps(params, indent=2)
+    print(json.dumps(params, indent=2))
 
     main(params)

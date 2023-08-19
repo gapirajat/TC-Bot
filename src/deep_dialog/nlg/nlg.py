@@ -7,7 +7,7 @@ Created on Oct 17, 2016
 @author: xiul
 '''
 
-import cPickle as pickle
+import pickle as pickle
 import copy, argparse, json
 import numpy as np
 
@@ -25,7 +25,7 @@ class nlg:
         sentence = pred_template
         suffix = "_PLACEHOLDER"
         
-        for slot in slot_val_dict.keys():
+        for slot in list(slot_val_dict.keys()):
             slot_vals = slot_val_dict[slot]
             slot_placeholder = slot + suffix
             if slot == 'result' or slot == 'numberofpeople': continue
@@ -33,13 +33,13 @@ class nlg:
             tmp_sentence = sentence.replace(slot_placeholder, slot_vals, 1)
             sentence = tmp_sentence
                 
-        if 'numberofpeople' in slot_val_dict.keys():
+        if 'numberofpeople' in list(slot_val_dict.keys()):
             slot_vals = slot_val_dict['numberofpeople']
             slot_placeholder = 'numberofpeople' + suffix
             tmp_sentence = sentence.replace(slot_placeholder, slot_vals, 1)
             sentence = tmp_sentence
     
-        for slot in slot_dict.keys():
+        for slot in list(slot_dict.keys()):
             slot_placeholder = slot + suffix
             tmp_sentence = sentence.replace(slot_placeholder, '')
             sentence = tmp_sentence
@@ -54,19 +54,19 @@ class nlg:
         boolean_in = False
         
         # remove I do not care slot in task(complete)
-        if dia_act['diaact'] == 'inform' and 'taskcomplete' in dia_act['inform_slots'].keys() and dia_act['inform_slots']['taskcomplete'] != dialog_config.NO_VALUE_MATCH:
-            inform_slot_set = dia_act['inform_slots'].keys()
+        if dia_act['diaact'] == 'inform' and 'taskcomplete' in list(dia_act['inform_slots'].keys()) and dia_act['inform_slots']['taskcomplete'] != dialog_config.NO_VALUE_MATCH:
+            inform_slot_set = list(dia_act['inform_slots'].keys())
             for slot in inform_slot_set:
                 if dia_act['inform_slots'][slot] == dialog_config.I_DO_NOT_CARE: del dia_act['inform_slots'][slot]
         
-        if dia_act['diaact'] in self.diaact_nl_pairs['dia_acts'].keys():
+        if dia_act['diaact'] in list(self.diaact_nl_pairs['dia_acts'].keys()):
             for ele in self.diaact_nl_pairs['dia_acts'][dia_act['diaact']]:
                 if set(ele['inform_slots']) == set(dia_act['inform_slots'].keys()) and set(ele['request_slots']) == set(dia_act['request_slots'].keys()):
                     sentence = self.diaact_to_nl_slot_filling(dia_act, ele['nl'][turn_msg])
                     boolean_in = True
                     break
         
-        if dia_act['diaact'] == 'inform' and 'taskcomplete' in dia_act['inform_slots'].keys() and dia_act['inform_slots']['taskcomplete'] == dialog_config.NO_VALUE_MATCH:
+        if dia_act['diaact'] == 'inform' and 'taskcomplete' in list(dia_act['inform_slots'].keys()) and dia_act['inform_slots']['taskcomplete'] == dialog_config.NO_VALUE_MATCH:
             sentence = "Oh sorry, there is no ticket available."
         
         if boolean_in == False: sentence = self.translate_diaact(dia_act)
@@ -98,20 +98,20 @@ class nlg:
             words = np.zeros((1, len(word_dict)))
             words[0, word_dict['s_o_s']] = 1.0
     
-        for slot in dia_act['inform_slots'].keys():
+        for slot in list(dia_act['inform_slots'].keys()):
             slot_index = slot_dict[slot]
             slot_rep[0, slot_index*slot_rep_bit] = 1.0
         
             for slot_val in dia_act['inform_slots'][slot]:
                 if self.params['dia_slot_val'] == 2:
                     slot_placeholder = slot + suffix
-                    if slot_placeholder in template_word_dict.keys():
+                    if slot_placeholder in list(template_word_dict.keys()):
                         word_rep[0, template_word_dict[slot_placeholder]] = 1.0
                 elif self.params['dia_slot_val'] == 1:
-                    if slot_val in word_dict.keys():
+                    if slot_val in list(word_dict.keys()):
                         word_rep[0, word_dict[slot_val]] = 1.0
                     
-        for slot in dia_act['request_slots'].keys():
+        for slot in list(dia_act['request_slots'].keys()):
             slot_index = slot_dict[slot]
             slot_rep[0, slot_index*slot_rep_bit + 1] = 1.0
     
@@ -135,8 +135,7 @@ class nlg:
     def load_nlg_model(self, model_path):
         """ load the trained NLG model """  
         
-        model_params = pickle.load(open(model_path, 'rb'))
-    
+        model_params = pickle.load(open(model_path, 'rb')., encoding="bytes")
         hidden_size = model_params['model']['Wd'].shape[0]
         output_size = model_params['model']['Wd'].shape[1]
     
@@ -153,7 +152,7 @@ class nlg:
         self.template_word_dict = copy.deepcopy(model_params['template_word_dict'])
         self.slot_dict = copy.deepcopy(model_params['slot_dict'])
         self.act_dict = copy.deepcopy(model_params['act_dict'])
-        self.inverse_word_dict = {self.template_word_dict[k]:k for k in self.template_word_dict.keys()}
+        self.inverse_word_dict = {self.template_word_dict[k]:k for k in list(self.template_word_dict.keys())}
         self.params = copy.deepcopy(model_params['params'])
         
     
@@ -162,7 +161,7 @@ class nlg:
         
         sentence = template_sentence
         counter = 0
-        for slot in dia_act['inform_slots'].keys():
+        for slot in list(dia_act['inform_slots'].keys()):
             slot_val = dia_act['inform_slots'][slot]
             if slot_val == dialog_config.NO_VALUE_MATCH:
                 sentence = slot + " is not available!"
@@ -171,7 +170,8 @@ class nlg:
                 counter += 1
                 sentence = sentence.replace('$'+slot+'$', '', 1)
                 continue
-            
+            print(type(slot))
+            print(type(slot_val))
             sentence = sentence.replace('$'+slot+'$', slot_val, 1)
         
         if counter > 0 and counter == len(dia_act['inform_slots']):
@@ -185,10 +185,10 @@ class nlg:
         
         self.diaact_nl_pairs = json.load(open(path, 'rb'))
         
-        for key in self.diaact_nl_pairs['dia_acts'].keys():
+        for key in list(self.diaact_nl_pairs['dia_acts'].keys()):
             for ele in self.diaact_nl_pairs['dia_acts'][key]:
-                ele['nl']['usr'] = ele['nl']['usr'].encode('utf-8') # encode issue
-                ele['nl']['agt'] = ele['nl']['agt'].encode('utf-8') # encode issue
+                ele['nl']['usr'] = ele['nl']['usr'].encode('bytes') # encode issue
+                ele['nl']['agt'] = ele['nl']['agt'].encode('bytes') # encode issue
 
 
 def main(params):
@@ -202,6 +202,6 @@ if __name__ == "__main__":
     params = vars(args)
 
     print ("User Simulator Parameters:")
-    print (json.dumps(params, indent=2))
+    print((json.dumps(params, indent=2)))
 
     main(params)
