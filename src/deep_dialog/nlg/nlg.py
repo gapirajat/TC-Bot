@@ -136,8 +136,8 @@ class nlg:
         """ load the trained NLG model """  
         
         model_params = pickle.load(open(model_path, 'rb'), encoding="bytes")
-        hidden_size = model_params['model']['Wd'].shape[0]
-        output_size = model_params['model']['Wd'].shape[1]
+        hidden_size = str(model_params['model']['Wd'].shape[0])
+        output_size = str(model_params['model']['Wd'].shape[1])
     
         if model_params['params']['model'] == 'lstm_tanh': # lstm_tanh
             diaact_input_size = model_params['model']['Wah'].shape[0]

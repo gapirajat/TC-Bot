@@ -93,7 +93,7 @@ p24
 I00
 sS'goal_file_path'
 p25
-S'.\\deep_dialog\\data\\user_goals_first_turn_template.part.movie.v1.p'
+S'.\\deep_dialog\\data\\user_goals_first_turn_template.part.movie.v1_p3.pkl'
 p26
 sS'max_turn'
 p27
@@ -121,7 +121,7 @@ p35
 F0.29999999999999999
 sS'nlu_model_path'
 p36
-S'./deep_dialog/models/nlu/lstm_[1468447442.91]_39_80_0.921.p'
+S'./deep_dialog/models/nlu/lstm_[1468447442.91]_39_80_0.921_p3.pkl'
 p37
 sS'epsilon'
 p38
@@ -131,7 +131,7 @@ p39
 I16
 sS'nlg_model_path'
 p40
-S'./deep_dialog/models/nlg/lstm_tanh_relu_[1468202263.38]_2_0.610.p'
+S'./deep_dialog/models/nlg/lstm_tanh_relu_[1468202263.38]_2_0.610_p3.pkl'
 p41
 sS'act_set'
 p42

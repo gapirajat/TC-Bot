@@ -52,11 +52,11 @@ tc_path = os.environ.get('TC_PATH') or '/workspaces/TC-Bot/src/'
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dict_path', dest='dict_path', type=str, default=tc_path + '/deep_dialog/data/dicts.v3.p', help='path to the .json dictionary file')
-    parser.add_argument('--movie_kb_path', dest='movie_kb_path', type=str, default=tc_path + '/deep_dialog/data/movie_kb.1k.p', help='path to the movie kb .json file')
+    parser.add_argument('--dict_path', dest='dict_path', type=str, default=tc_path + '/deep_dialog/data/dicts.v3_p3.pkl', help='path to the .json dictionary file')
+    parser.add_argument('--movie_kb_path', dest='movie_kb_path', type=str, default=tc_path + '/deep_dialog/data/movie_kb.1k_p3.pkl', help='path to the movie kb .json file')
     parser.add_argument('--act_set', dest='act_set', type=str, default=tc_path + '/deep_dialog/data/dia_acts.txt', help='path to dia act set; none for loading from labeled file')
     parser.add_argument('--slot_set', dest='slot_set', type=str, default=tc_path + '/deep_dialog/data/slot_set.txt', help='path to slot set; none for loading from labeled file')
-    parser.add_argument('--goal_file_path', dest='goal_file_path', type=str, default=tc_path + '/deep_dialog/data/user_goals_first_turn_template.part.movie.v1.p', help='a list of user goals')
+    parser.add_argument('--goal_file_path', dest='goal_file_path', type=str, default=tc_path + '/deep_dialog/data/user_goals_first_turn_template.part.movie.v1_p3.pkl', help='a list of user goals')
     parser.add_argument('--diaact_nl_pairs', dest='diaact_nl_pairs', type=str, default=tc_path + '/deep_dialog/data/dia_act_nl_pairs.v6.json', help='path to the pre-defined dia_act&NL pairs')
 
     parser.add_argument('--max_turn', dest='max_turn', default=20, type=int, help='maximum length of each dialog (default=20, 0=no maximum length)')
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     parser.add_argument('--epsilon', dest='epsilon', type=float, default=0, help='Epsilon to determine stochasticity of epsilon-greedy agent policies')
     
     # load NLG & NLU model
-    parser.add_argument('--nlg_model_path', dest='nlg_model_path', type=str, default=tc_path + '/deep_dialog/models/nlg/lstm_tanh_relu_[1468202263.38]_2_0.610.p', help='path to model file')
-    parser.add_argument('--nlu_model_path', dest='nlu_model_path', type=str, default=tc_path + '/deep_dialog/models/nlu/lstm_[1468447442.91]_39_80_0.921.p', help='path to the NLU model file')
+    parser.add_argument('--nlg_model_path', dest='nlg_model_path', type=str, default=tc_path + '/deep_dialog/models/nlg/lstm_tanh_relu_[1468202263.38]_2_0.610_p3.pkl', help='path to model file')
+    parser.add_argument('--nlu_model_path', dest='nlu_model_path', type=str, default=tc_path + '/deep_dialog/models/nlu/lstm_[1468447442.91]_39_80_0.921_p3.pkl', help='path to the NLU model file')
     
     parser.add_argument('--act_level', dest='act_level', type=int, default=0, help='0 for dia_act level; 1 for NL level')
     parser.add_argument('--run_mode', dest='run_mode', type=int, default=0, help='run_mode: 0 for default NL; 1 for dia_act; 2 for both')
@@ -264,7 +264,7 @@ performance_records['ave_reward'] = {}
 
 """ Save model """
 def save_model(path, agt, success_rate, agent, best_epoch, cur_epoch):
-    filename = 'agt_%s_%s_%s_%.5f.p' % (agt, best_epoch, cur_epoch, success_rate)
+    filename = 'agt_%s_%s_%s_%.5f_p3.pkl' % (agt, best_epoch, cur_epoch, success_rate)
     filepath = os.path.join(path, filename)
     checkpoint = {}
     if agt == 9: checkpoint['model'] = copy.deepcopy(agent.dqn.model)
