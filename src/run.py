@@ -46,7 +46,7 @@ Launch a dialog simulation per the command line arguments
 This function instantiates a user_simulator, an agent, and a dialog system.
 Next, it triggers the simulator to run for the specified number of episodes.
 """
-tc_path = '/workspaces/TC-Bot/src/'#os.environ.get('TC_PATH',"/content/TC-Bot/src")
+tc_path = os.environ.get('TC_PATH') or '/workspaces/TC-Bot/src/'
 
 
 if __name__ == "__main__":
