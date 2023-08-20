@@ -115,7 +115,7 @@ dict_path = params['dict_path']
 goal_file_path = params['goal_file_path']
 
 # load the user goals from .p file
-all_goal_set = pickle.load(open(goal_file_path, 'rb'), encoding="utf8")
+all_goal_set = pickle.load(open(goal_file_path, 'rb'), encoding="bytes")
 
 # split goal set
 split_fold = params.get('split_fold', 5)
