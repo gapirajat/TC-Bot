@@ -136,8 +136,8 @@ class nlg:
         """ load the trained NLG model """  
         
         model_params = pickle.load(open(model_path, 'rb'), encoding="bytes")
-        hidden_size = str(model_params['model']['Wd'].shape[0])
-        output_size = str(model_params['model']['Wd'].shape[1])
+        hidden_size = model_params['model']['Wd'].shape[0]
+        output_size = model_params['model']['Wd'].shape[1]
     
         if model_params['params']['model'] == 'lstm_tanh': # lstm_tanh
             diaact_input_size = model_params['model']['Wah'].shape[0]
@@ -170,8 +170,6 @@ class nlg:
                 counter += 1
                 sentence = sentence.replace('$'+slot+'$', '', 1)
                 continue
-            print(type(slot))
-            print(type(slot_val))
             sentence = sentence.replace('$'+slot+'$', slot_val, 1)
         
         if counter > 0 and counter == len(dia_act['inform_slots']):
@@ -187,8 +185,8 @@ class nlg:
         
         for key in list(self.diaact_nl_pairs['dia_acts'].keys()):
             for ele in self.diaact_nl_pairs['dia_acts'][key]:
-                ele['nl']['usr'] = ele['nl']['usr'].encode('bytes') # encode issue
-                ele['nl']['agt'] = ele['nl']['agt'].encode('bytes') # encode issue
+                ele['nl']['usr'] = ele['nl']['usr'] # encode issue
+                ele['nl']['agt'] = ele['nl']['agt'] # encode issue
 
 
 def main(params):
